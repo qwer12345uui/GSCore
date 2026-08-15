@@ -8,6 +8,10 @@
 #ifndef GSCoreC_h
 #define GSCoreC_h
 
+#import <Foundation/Foundation.h>
+
+FOUNDATION_EXPORT NSString *GSCoreJailbreakPath(NSString *path);
+
 #include "SBIconController.h"
 #include "FBSSystemService.h"
 #include "UIDevice.h"

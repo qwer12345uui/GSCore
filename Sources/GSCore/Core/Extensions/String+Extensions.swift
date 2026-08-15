@@ -6,12 +6,17 @@
 //
 
 import Foundation
+import GSCoreC
 import libroot
 
 extension String {
     
     public var rootify: Self {
-        jbRootPath(self)
+        #if ROOTHIDE
+        return GSCoreJailbreakPath(self)
+        #else
+        return jbRootPath(self)
+        #endif
     }
     
     public func localize(bundle: Bundle) -> Self {
