@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import GSCoreC
 import libroot
 
 // MARK: - Public
@@ -19,7 +20,7 @@ public struct Ecosystem {
         /// at runtime. RootHide therefore never receives a fixed `/var/jb` value.
         public var rawValue: String {
             switch self {
-            case .rootless: return jbRootPath("/")
+            case .rootless: return Ecosystem.runtimeJailbreakRoot
             case .root: return "/"
             }
         }
@@ -30,7 +31,7 @@ public struct Ecosystem {
         public init?(rawValue: String) {
             if rawValue == "/" {
                 self = .root
-            } else if rawValue == jbRootPath("/") {
+            } else if rawValue == Ecosystem.runtimeJailbreakRoot {
                 self = .rootless
             } else {
                 return nil
@@ -38,16 +39,26 @@ public struct Ecosystem {
         }
     }
     
-    /// Returns the scheme category, not a literal bootstrap path. `jbRootPath("/")`
-    /// is randomized by RootHide, therefore any non-root result is rootless.
+    /// RootHide resolves jailbreak files through `jbroot()`; other rootless
+    /// environments use libroot's dynamic root-prefix API.
+    private static var runtimeJailbreakRoot: String {
+        #if ROOTHIDE
+        return GSCoreJailbreakPath("/")
+        #else
+        return jbRootPath("/")
+        #endif
+    }
+
+    /// Returns the scheme category, not a literal bootstrap path. RootHide
+    /// randomizes jbroot, therefore any non-root result is rootless.
     public static var jailbreakType: JailbreakType {
-        jbRootPath("/") == "/" ? .root : .rootless
+        runtimeJailbreakRoot == "/" ? .root : .rootless
     }
 
     /// Runtime-resolved jailbreak root. Callers that access jailbreak files must
     /// use this or `rootify`, never a literal bootstrap prefix.
     public static var jailbreakRootPath: String {
-        jbRootPath("/")
+        runtimeJailbreakRoot
     }
     
     public static func isInstalled(tweak: Tweak) -> Bool {
