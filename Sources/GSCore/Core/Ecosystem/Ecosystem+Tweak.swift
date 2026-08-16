@@ -16,11 +16,15 @@ public extension Ecosystem {
         case ramUnderTime
         
         var dylibPath: String {
-            URL(filePath: Directory.tweaks).appending(component: dylibName).absoluteString
+            URL(fileURLWithPath: Directory.tweaks)
+                .appendingPathComponent(dylibName)
+                .path
         }
         
         var prefsPath: String {
-            URL(filePath: Directory.prefs).appending(component: prefsName).absoluteString
+            URL(fileURLWithPath: Directory.prefs)
+                .appendingPathComponent(prefsName)
+                .path
         }
         
         var dylibName: String {
