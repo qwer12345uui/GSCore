@@ -15,12 +15,19 @@ public extension Ecosystem {
         case dodo
         case ramUnderTime
         
+        /// iOS 15-compatible file-system path for the installed tweak dylib.
+        /// `URL(filePath:)` and `appending(component:)` require iOS 16.
         var dylibPath: String {
-            URL(filePath: Directory.tweaks).appending(component: dylibName).absoluteString
+            URL(fileURLWithPath: Directory.tweaks)
+                .appendingPathComponent(dylibName)
+                .path
         }
         
+        /// iOS 15-compatible file-system path for the tweak preference plist.
         var prefsPath: String {
-            URL(filePath: Directory.prefs).appending(component: prefsName).absoluteString
+            URL(fileURLWithPath: Directory.prefs)
+                .appendingPathComponent(prefsName)
+                .path
         }
         
         var dylibName: String {
