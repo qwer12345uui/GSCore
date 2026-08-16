@@ -6,14 +6,18 @@
 //
 
 import Foundation
-import GSCoreC
 import libroot
+
+#if ROOTHIDE
+@_silgen_name("jbroot")
+func gsCoreJBRoot(_ path: NSString) -> NSString
+#endif
 
 extension String {
     
     public var rootify: Self {
         #if ROOTHIDE
-        return GSCoreJailbreakPath(self)
+        return gsCoreJBRoot(self as NSString) as String
         #else
         return jbRootPath(self)
         #endif

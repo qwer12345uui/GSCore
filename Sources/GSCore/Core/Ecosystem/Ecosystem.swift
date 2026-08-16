@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import GSCoreC
 import libroot
 
 // MARK: - Public
@@ -43,7 +42,7 @@ public struct Ecosystem {
     /// environments use libroot's dynamic root-prefix API.
     private static var runtimeJailbreakRoot: String {
         #if ROOTHIDE
-        return GSCoreJailbreakPath("/")
+        return gsCoreJBRoot("/" as NSString) as String
         #else
         return jbRootPath("/")
         #endif
